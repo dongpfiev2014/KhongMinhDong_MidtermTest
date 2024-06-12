@@ -16,6 +16,7 @@ app.use("/api/v1/auth", authRouter);
 app.use(verifyUserAuthentication);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/profile", profileRouter);
+app.use("/api/v1/profile", profileRouter);
 
 connectDB().then(() => {
   app.listen(process.env.SERVER_PORT, (err) => {
