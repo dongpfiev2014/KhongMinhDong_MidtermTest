@@ -17,6 +17,10 @@ const ProfilesSchema = new mongoose.Schema({
   education: {
     type: String,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+  },
 });
 
 export default ProfilesSchema;

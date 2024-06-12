@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import UsersModel from "../models/users/user.model.js";
+import jwt from "jsonwebtoken";
 import { JWT } from "../utils/getJsonWebToken.js";
 
 export const signUpUser = async (req, res) => {
@@ -45,7 +46,7 @@ export const logInUser = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, existingUser.password);
     if (!isMatch) {
-      throw new Error("Wrong password");
+      throw new Error("Wrong password or username");
     }
     res.status(200).send({
       message: "Login successful!",
@@ -67,10 +68,25 @@ export const logInUser = async (req, res) => {
 
 export const logOutUser = async (req, res) => {
   try {
-    res.status(200).send({
-      message: "Logout successful!",
-      success: true,
-    });
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) {
+      res.status(401).send({
+        data: null,
+        success: false,
+        message: "Authorization failed",
+      });
+    } else {
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const existingUser = await UsersModel.findById(decodedToken._id);
+      if (!existingUser) {
+        throw new Error("Invalid user");
+      }
+      console.log(existingUser);
+      res.status(200).send({
+        message: "Logout successful!",
+        success: true,
+      });
+    }
   } catch (error) {
     res.status(500).send({
       data: null,
