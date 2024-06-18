@@ -21,7 +21,7 @@ connectDB().then(() => {
   app.listen(process.env.SERVER_PORT, (err) => {
     if (err) throw new Error();
     console.log(
-      `Server is running on ${process.env.SERVER_URL}:${process.env.SERVER_PORT}`
+      `Server is running on ${process.env.SERVER_URL}:${process.env.SERVER_PORT} bip`
     );
   });
 });
